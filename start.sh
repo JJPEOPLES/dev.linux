@@ -16,10 +16,6 @@ echo "devuser:password" | chpasswd
 # Configure Tomcat
 mkdir -p /var/lib/tomcat9/webapps/guacamole
 cp -r /opt/guacamole/web/* /var/lib/tomcat9/webapps/guacamole/
-# Use --force-yes to avoid prompts
-if [ ! -d "/var/lib/tomcat9/conf" ]; then
-    apt-get -f install -y --force-yes --no-install-recommends
-fi
 chown -R tomcat:tomcat /var/lib/tomcat9/webapps/guacamole
 
 # Create a simple HTML file for Guacamole client

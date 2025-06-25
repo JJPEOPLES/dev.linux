@@ -13,6 +13,27 @@ cp /supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 mkdir -p /home/devuser/.xrdp
 echo "devuser:password" | chpasswd
 
+# Ensure XRDP is properly configured
+if [ ! -f "/etc/xrdp/xrdp.ini" ]; then
+    mkdir -p /etc/xrdp
+    echo "[globals]" > /etc/xrdp/xrdp.ini
+    echo "port=3390" >> /etc/xrdp/xrdp.ini
+    echo "max_bpp=32" >> /etc/xrdp/xrdp.ini
+    echo "crypt_level=high" >> /etc/xrdp/xrdp.ini
+    echo "security_layer=tls" >> /etc/xrdp/xrdp.ini
+    echo "allow_channels=true" >> /etc/xrdp/xrdp.ini
+    echo "bitmap_compression=true" >> /etc/xrdp/xrdp.ini
+    echo "tcp_nodelay=true" >> /etc/xrdp/xrdp.ini
+    echo "tcp_keepalive=true" >> /etc/xrdp/xrdp.ini
+    echo "autorun=startlxde" >> /etc/xrdp/xrdp.ini
+fi
+
+if [ ! -f "/etc/xrdp/startwm.sh" ]; then
+    echo "#!/bin/sh" > /etc/xrdp/startwm.sh
+    echo "exec startlxde" >> /etc/xrdp/startwm.sh
+    chmod +x /etc/xrdp/startwm.sh
+fi
+
 # Configure Tomcat
 mkdir -p /var/lib/tomcat9/webapps/guacamole
 mkdir -p /var/lib/tomcat9/logs

@@ -10,7 +10,6 @@ RUN mkdir -p /tmp/debs
 RUN cd /tmp/debs && \
     wget -q http://archive.ubuntu.com/ubuntu/pool/universe/l/lxde-common/lxde-common_0.99.2-3_all.deb && \
     wget -q http://archive.ubuntu.com/ubuntu/pool/universe/l/lxde-core/lxde-core_11_all.deb && \
-    wget -q http://archive.ubuntu.com/ubuntu/pool/universe/x/xrdp/xrdp_0.9.17-2_amd64.deb && \
     wget -q http://archive.ubuntu.com/ubuntu/pool/main/n/net-tools/net-tools_1.60+git20181103.0eebece-1ubuntu5_amd64.deb && \
     wget -q http://archive.ubuntu.com/ubuntu/pool/main/f/firefox/firefox_99.0+build2-0ubuntu1_amd64.deb && \
     wget -q http://archive.ubuntu.com/ubuntu/pool/main/g/git/git_2.34.1-1ubuntu1_amd64.deb && \
@@ -20,6 +19,12 @@ RUN cd /tmp/debs && \
     apt-get install -y ./*.deb --no-install-recommends || true && \
     apt-get -f install -y --no-install-recommends && \
     rm -rf /tmp/debs/* && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
+
+# Install XRDP separately
+RUN apt-get update && \
+    apt-get install -y xrdp --no-install-recommends && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
@@ -58,11 +63,6 @@ RUN cd /tmp/debs && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
-# Configure XRDP
-RUN sed -i 's/port=3389/port=3390/g' /etc/xrdp/xrdp.ini && \
-    echo "#!/bin/sh\nexec startlxde" > /etc/xrdp/startwm.sh && \
-    chmod +x /etc/xrdp/startwm.sh
-
 # Download Guacamole dependencies
 RUN cd /tmp/debs && \
     wget -q http://archive.ubuntu.com/ubuntu/pool/main/c/cairo/libcairo2-dev_1.16.0-5ubuntu2_amd64.deb && \
@@ -86,6 +86,22 @@ RUN cd /tmp/debs && \
     rm -rf /tmp/debs/* && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
+
+# Configure XRDP
+RUN mkdir -p /etc/xrdp && \
+    echo "[globals]" > /etc/xrdp/xrdp.ini && \
+    echo "port=3390" >> /etc/xrdp/xrdp.ini && \
+    echo "max_bpp=32" >> /etc/xrdp/xrdp.ini && \
+    echo "crypt_level=high" >> /etc/xrdp/xrdp.ini && \
+    echo "security_layer=tls" >> /etc/xrdp/xrdp.ini && \
+    echo "allow_channels=true" >> /etc/xrdp/xrdp.ini && \
+    echo "bitmap_compression=true" >> /etc/xrdp/xrdp.ini && \
+    echo "tcp_nodelay=true" >> /etc/xrdp/xrdp.ini && \
+    echo "tcp_keepalive=true" >> /etc/xrdp/xrdp.ini && \
+    echo "autorun=startlxde" >> /etc/xrdp/xrdp.ini && \
+    echo "#!/bin/sh" > /etc/xrdp/startwm.sh && \
+    echo "exec startlxde" >> /etc/xrdp/startwm.sh && \
+    chmod +x /etc/xrdp/startwm.sh
 
 # Download and install Guacamole Server
 RUN mkdir -p /opt/guacamole && \

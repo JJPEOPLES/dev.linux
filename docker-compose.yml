@@ -5,7 +5,7 @@ services:
     build: .
     container_name: dev.linux.containers
     ports:
-      - "3390:3390"
+      - "8080:8080"
     volumes:
       - ./workspace:/home/devuser/workspace
     restart: unless-stopped

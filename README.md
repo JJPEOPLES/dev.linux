@@ -1,11 +1,11 @@
 # dev.linux.containers
 
-A web-based Linux development environment with LXDE desktop accessible via RDP, hosted at dev.k2lang.org.
+A web-based Linux development environment with LXDE desktop accessible directly in your browser, hosted at dev.k2lang.org.
 
 ## Features
 
 - Ubuntu 22.04 with LXDE desktop environment
-- Remote access via RDP (port 3390)
+- Browser-based access via noVNC (no client software needed)
 - Pre-installed development tools (git, python, nodejs, etc.)
 - Persistent workspace through Docker volumes
 
@@ -21,24 +21,22 @@ cd dev.linux.containers
 # Build and start the container
 docker-compose up -d
 
-# Connect via RDP client to localhost:3390
-# Username: devuser
-# Password: password
+# Access the desktop environment
+Open your browser and navigate to: http://localhost:8080
+Password: password
 ```
 
 ## Accessing the Hosted Environment
 
-The environment is hosted at dev.k2lang.org:3390 and can be accessed using any RDP client:
+The environment is hosted at dev.k2lang.org and can be accessed using any modern web browser:
 
-1. Open your RDP client (like Microsoft Remote Desktop)
-2. Connect to dev.k2lang.org:3390
-3. Use the following credentials:
-   - Username: devuser
-   - Password: password
+1. Open your web browser (Chrome, Firefox, Safari, Edge, etc.)
+2. Navigate to https://dev.k2lang.org
+3. Enter the password when prompted: `password`
 
 ## Security Notice
 
 This is a development environment. For production use, please:
 - Change the default password
 - Set up proper authentication
-- Consider adding SSL/TLS for secure connections
+- Consider implementing additional security measures

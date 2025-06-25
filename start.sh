@@ -1,7 +1,10 @@
 #!/bin/bash
 
-# Start XRDP service
-service xrdp start
+# Make sure the permissions are correct
+chown -R devuser:devuser /home/devuser
 
-# Keep the container running
-tail -f /dev/null
+# Copy nginx configuration
+cp /nginx.conf /etc/nginx/nginx.conf
+
+# Start supervisord to manage all services
+/usr/bin/supervisord -c /etc/supervisor/conf.d/supervisord.conf

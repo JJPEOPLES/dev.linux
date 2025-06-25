@@ -10,4 +10,4 @@ services:
       - dev.k2lang.org
     envVars:
       - key: PORT
-        value: 3390
+        value: 8080

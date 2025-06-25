@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>dev.linux.containers - Linux Development Environment</title>
+    <title>dev.linux.containers - Browser-based Linux Environment</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -11,6 +11,7 @@
             max-width: 800px;
             margin: 0 auto;
             padding: 20px;
+            color: #333;
         }
         h1 {
             color: #333;
@@ -34,6 +35,23 @@
             padding: 20px;
             margin-bottom: 20px;
         }
+        .button {
+            display: inline-block;
+            background-color: #4CAF50;
+            color: white;
+            padding: 12px 24px;
+            text-align: center;
+            text-decoration: none;
+            font-size: 16px;
+            border-radius: 4px;
+            border: none;
+            cursor: pointer;
+            margin-top: 20px;
+            transition: background-color 0.3s;
+        }
+        .button:hover {
+            background-color: #45a049;
+        }
     </style>
 </head>
 <body>
@@ -41,23 +59,16 @@
     
     <div class="container">
         <h2>About This Environment</h2>
-        <p>This is a Linux development environment with LXDE desktop accessible via RDP.</p>
+        <p>This is a Linux development environment with LXDE desktop accessible directly in your web browser.</p>
         <p>The environment is based on Ubuntu 22.04 and includes common development tools.</p>
+        <a href="/vnc/" class="button">Launch Linux Desktop</a>
     </div>
     
     <div class="container">
-        <h2>How to Connect</h2>
-        <p>You can connect to this environment using any RDP client:</p>
-        <ol>
-            <li>Open your RDP client (like Microsoft Remote Desktop)</li>
-            <li>Connect to <code>dev.k2lang.org:3390</code></li>
-            <li>Use the following credentials:
-                <ul>
-                    <li>Username: <code>devuser</code></li>
-                    <li>Password: <code>password</code></li>
-                </ul>
-            </li>
-        </ol>
+        <h2>How to Use</h2>
+        <p>Simply click the "Launch Linux Desktop" button above to start using the Linux environment in your browser.</p>
+        <p>When prompted, enter the password: <code>password</code></p>
+        <p>No additional software or plugins are required - everything runs in your web browser!</p>
     </div>
     
     <div class="container">

@@ -15,8 +15,8 @@ To run this environment locally:
 
 ```bash
 # Clone the repository
-git clone https://github.com/JJPEOPLES/dev.linux.git
-cd dev.linux
+git clone https://github.com/yourusername/dev.linux.containers.git
+cd dev.linux.containers
 
 # Build and start the container
 docker-compose up -d
@@ -39,4 +39,4 @@ The environment is hosted at dev.k2lang.org and can be accessed using any modern
 This is a development environment. For production use, please:
 - Change the default password
 - Set up proper authentication
-- Consider implementing additional security measures
+- Consider adding SSL/TLS for secure connections

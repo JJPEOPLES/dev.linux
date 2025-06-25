@@ -3,6 +3,12 @@ FROM ubuntu:22.04
 # Prevent interactive prompts during package installation
 ENV DEBIAN_FRONTEND=noninteractive
 
+# Install essential tools first
+RUN apt-get update && \
+    apt-get install -y wget curl ca-certificates --no-install-recommends && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
+
 # Create a directory for downloaded packages
 RUN mkdir -p /tmp/debs
 
@@ -13,8 +19,6 @@ RUN cd /tmp/debs && \
     wget -q http://archive.ubuntu.com/ubuntu/pool/main/n/net-tools/net-tools_1.60+git20181103.0eebece-1ubuntu5_amd64.deb && \
     wget -q http://archive.ubuntu.com/ubuntu/pool/main/f/firefox/firefox_99.0+build2-0ubuntu1_amd64.deb && \
     wget -q http://archive.ubuntu.com/ubuntu/pool/main/g/git/git_2.34.1-1ubuntu1_amd64.deb && \
-    wget -q http://archive.ubuntu.com/ubuntu/pool/main/c/curl/curl_7.81.0-1ubuntu1_amd64.deb && \
-    wget -q http://archive.ubuntu.com/ubuntu/pool/main/w/wget/wget_1.21.2-2ubuntu1_amd64.deb && \
     apt-get update && \
     apt-get install -y ./*.deb --no-install-recommends || true && \
     apt-get -f install -y --no-install-recommends && \
@@ -104,12 +108,13 @@ RUN mkdir -p /etc/xrdp && \
     chmod +x /etc/xrdp/startwm.sh
 
 # Download and install Guacamole Server
-RUN mkdir -p /opt/guacamole && \
+RUN apt-get update && \
+    apt-get install -y wget alien --no-install-recommends && \
+    mkdir -p /opt/guacamole && \
     cd /tmp && \
     wget -q "https://github.com/apache/guacamole-server/releases/download/1.6.0/guacamole-server-1.6.0-1.el8.x86_64.rpm" && \
     alien --to-deb --scripts guacamole-server-1.6.0-1.el8.x86_64.rpm && \
     dpkg -i guacamole-server_1.6.0-2_amd64.deb || true && \
-    apt-get update && \
     apt-get -f install -y --no-install-recommends && \
     ldconfig && \
     rm -rf /tmp/guacamole-server* && \
@@ -117,13 +122,18 @@ RUN mkdir -p /opt/guacamole && \
     rm -rf /var/lib/apt/lists/*
 
 # Download and install Guacamole Client
-RUN cd /opt/guacamole && \
+RUN apt-get update && \
+    apt-get install -y wget unzip --no-install-recommends && \
+    mkdir -p /opt/guacamole && \
+    cd /opt/guacamole && \
     wget -q "https://downloads.apache.org/guacamole/1.6.0/binary/guacamole-1.6.0.war" -O guacamole.war && \
     mkdir -p /var/lib/tomcat9/webapps && \
     cp guacamole.war /var/lib/tomcat9/webapps/ && \
     mkdir -p /opt/guacamole/web && \
     unzip -q guacamole.war -d /opt/guacamole/web && \
-    rm guacamole.war
+    rm guacamole.war && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
 
 # Configure Guacamole
 RUN mkdir -p /etc/guacamole && \

@@ -72,6 +72,8 @@ RUN mkdir -p /opt/guacamole && \
 # Download and install Guacamole Client
 RUN cd /opt/guacamole && \
     wget -q "https://downloads.apache.org/guacamole/1.4.0/binary/guacamole-1.4.0.war" -O guacamole.war && \
+    mkdir -p /var/lib/tomcat9/webapps && \
+    cp guacamole.war /var/lib/tomcat9/webapps/ && \
     mkdir -p /opt/guacamole/web && \
     unzip -q guacamole.war -d /opt/guacamole/web && \
     rm guacamole.war
@@ -79,7 +81,11 @@ RUN cd /opt/guacamole && \
 # Configure Guacamole
 RUN mkdir -p /etc/guacamole && \
     echo "guacd-hostname: localhost" > /etc/guacamole/guacamole.properties && \
-    echo "guacd-port: 4822" >> /etc/guacamole/guacamole.properties
+    echo "guacd-port: 4822" >> /etc/guacamole/guacamole.properties && \
+    echo "user-mapping: /etc/guacamole/user-mapping.xml" >> /etc/guacamole/guacamole.properties
+
+# Copy Guacamole user mapping
+COPY guacamole-user-mapping.xml /etc/guacamole/user-mapping.xml
 
 # Create a user for the development environment
 RUN useradd -m -s /bin/bash -G sudo devuser && \
@@ -89,13 +95,13 @@ RUN useradd -m -s /bin/bash -G sudo devuser && \
 RUN mkdir -p /home/devuser/workspace && \
     chown -R devuser:devuser /home/devuser
 
-# Set up VNC password
-RUN mkdir -p /home/devuser/.vnc && \
-    echo "password" | vncpasswd -f > /home/devuser/.vnc/passwd && \
-    chmod 600 /home/devuser/.vnc/passwd && \
-    chown -R devuser:devuser /home/devuser/.vnc
+# Copy workspace files
+COPY workspace/ /home/devuser/workspace/
+RUN chown -R devuser:devuser /home/devuser/workspace
 
-# Configure noVNC
+# No VNC password needed with XRDP
+
+# Configure supervisor
 RUN mkdir -p /etc/supervisor/conf.d
 COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 
@@ -104,7 +110,7 @@ COPY start.sh /start.sh
 COPY nginx.conf /nginx.conf
 RUN chmod +x /start.sh
 
-# Expose noVNC web port
+# Expose web port
 EXPOSE 8080
 
 # Start services

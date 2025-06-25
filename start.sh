@@ -9,12 +9,42 @@ cp /nginx.conf /etc/nginx/nginx.conf
 # Copy supervisord configuration
 cp /supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 
-# Start guacd service
-/usr/local/sbin/guacd -b 127.0.0.1 -f &
-
 # Configure XRDP for the user
 mkdir -p /home/devuser/.xrdp
 echo "devuser:password" | chpasswd
+
+# Configure Tomcat
+mkdir -p /var/lib/tomcat9/webapps/guacamole
+cp -r /opt/guacamole/web/* /var/lib/tomcat9/webapps/guacamole/
+chown -R tomcat:tomcat /var/lib/tomcat9/webapps/guacamole
+
+# Create a simple HTML file for Guacamole client
+mkdir -p /opt/guacamole/web
+cat > /opt/guacamole/web/index.html << 'EOL'
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Linux Desktop - RDP Connection</title>
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            overflow: hidden;
+        }
+        iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+    </style>
+</head>
+<body>
+    <iframe src="http://localhost:8080/guacamole/" allowfullscreen="true"></iframe>
+</body>
+</html>
+EOL
 
 # Start supervisord to manage all services
 /usr/bin/supervisord -c /etc/supervisor/conf.d/supervisord.conf

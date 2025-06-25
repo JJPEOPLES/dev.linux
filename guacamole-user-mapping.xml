@@ -1,0 +1,14 @@
+<user-mapping>
+    <authorize username="devuser" password="password">
+        <connection name="Linux Desktop">
+            <protocol>rdp</protocol>
+            <param name="hostname">localhost</param>
+            <param name="port">3390</param>
+            <param name="username">devuser</param>
+            <param name="password">password</param>
+            <param name="ignore-cert">true</param>
+            <param name="resize-method">display-update</param>
+            <param name="security">nla</param>
+        </connection>
+    </authorize>
+</user-mapping>

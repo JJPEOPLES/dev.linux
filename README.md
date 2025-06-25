@@ -11,7 +11,25 @@ A web-based Linux development environment with LXDE desktop accessible directly 
 
 ## Local Development
 
-To run this environment locally:
+### Fast Build (Recommended)
+
+For a faster build that doesn't rely on apt-get, you can pre-download all the necessary .deb packages:
+
+```bash
+# Clone the repository
+git clone https://github.com/yourusername/dev.linux.containers.git
+cd dev.linux.containers
+
+# Download all required .deb packages (only needs to be done once)
+./download-debs.sh
+
+# Build and run the container
+docker-compose up -d
+```
+
+### Standard Build
+
+If you prefer not to pre-download packages:
 
 ```bash
 # Clone the repository
@@ -20,11 +38,15 @@ cd dev.linux.containers
 
 # Build and start the container
 docker-compose up -d
-
-# Access the desktop environment
-Open your browser and navigate to: http://localhost:8080
-Password: password
 ```
+
+The container will download all packages during the build process, which may take longer.
+
+### Access
+
+Once running, open your browser and navigate to: http://localhost:8080
+- Username: devuser
+- Password: password
 
 ## Accessing the Hosted Environment
 

@@ -1,0 +1,19 @@
+# Exclude everything
+*
+
+# Include specific files and directories
+!Dockerfile
+!supervisord.conf
+!nginx.conf
+!start.sh
+!workspace/
+!guacamole-user-mapping.xml
+
+# Include debs directory if it exists
+!debs/
+!debs/main/
+!debs/main/*.deb
+!debs/guacamole/
+!debs/guacamole/*.deb
+!debs/guacamole/*.war
+!debs/guacamole/*.rpm

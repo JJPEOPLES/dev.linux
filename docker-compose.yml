@@ -1,0 +1,11 @@
+version: '3'
+
+services:
+  dev-linux:
+    build: .
+    container_name: dev.linux.containers
+    ports:
+      - "3390:3390"
+    volumes:
+      - ./workspace:/home/devuser/workspace
+    restart: unless-stopped

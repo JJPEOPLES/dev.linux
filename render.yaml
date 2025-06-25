@@ -1,0 +1,13 @@
+services:
+  - type: web
+    name: dev-linux-containers
+    env: docker
+    repo: https://github.com/yourusername/dev.linux.containers.git  # Replace with your actual repository
+    region: oregon  # Choose your preferred region
+    plan: standard  # Choose your preferred plan
+    branch: main
+    domains:
+      - dev.k2lang.org
+    envVars:
+      - key: PORT
+        value: 3390

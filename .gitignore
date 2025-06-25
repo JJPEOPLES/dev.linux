@@ -1,0 +1,21 @@
+# Workspace files (except index.html)
+workspace/*
+!workspace/index.html
+
+# Node modules
+node_modules/
+
+# Python virtual environments
+venv/
+env/
+.env/
+
+# IDE files
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# OS files
+.DS_Store
+Thumbs.db

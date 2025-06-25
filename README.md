@@ -15,8 +15,8 @@ To run this environment locally:
 
 ```bash
 # Clone the repository
-git clone https://github.com/yourusername/dev.linux.containers.git
-cd dev.linux.containers
+git clone https://github.com/JJPEOPLES/dev.linux.git
+cd dev.linux
 
 # Build and start the container
 docker-compose up -d

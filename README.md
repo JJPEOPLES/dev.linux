@@ -5,7 +5,7 @@ A web-based Linux development environment with LXDE desktop accessible directly 
 ## Features
 
 - Ubuntu 22.04 with LXDE desktop environment
-- Browser-based access via noVNC (no client software needed)
+- Browser-based access via Apache Guacamole RDP client (no client software needed)
 - Pre-installed development tools (git, python, nodejs, etc.)
 - Persistent workspace through Docker volumes
 

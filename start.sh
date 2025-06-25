@@ -15,8 +15,16 @@ echo "devuser:password" | chpasswd
 
 # Configure Tomcat
 mkdir -p /var/lib/tomcat9/webapps/guacamole
+mkdir -p /var/lib/tomcat9/logs
 cp -r /opt/guacamole/web/* /var/lib/tomcat9/webapps/guacamole/
-chown -R tomcat:tomcat /var/lib/tomcat9/webapps/guacamole
+mkdir -p /usr/share/tomcat9/bin
+if [ ! -f "/usr/share/tomcat9/bin/startup.sh" ]; then
+    echo "#!/bin/bash" > /usr/share/tomcat9/bin/startup.sh
+    echo "catalina.sh start" >> /usr/share/tomcat9/bin/startup.sh
+    chmod +x /usr/share/tomcat9/bin/startup.sh
+fi
+touch /var/lib/tomcat9/logs/catalina.out
+chown -R tomcat:tomcat /var/lib/tomcat9
 
 # Create a simple HTML file for Guacamole client
 mkdir -p /opt/guacamole/web
@@ -41,10 +49,15 @@ cat > /opt/guacamole/web/index.html << 'EOL'
     </style>
 </head>
 <body>
-    <iframe src="http://localhost:8080/guacamole/" allowfullscreen="true"></iframe>
+    <iframe src="/guacamole/" allowfullscreen="true"></iframe>
 </body>
 </html>
 EOL
+
+# Ensure guacd is running
+if [ ! -f "/usr/local/sbin/guacd" ]; then
+    ln -s /usr/local/bin/guacd /usr/local/sbin/guacd
+fi
 
 # Start supervisord to manage all services
 /usr/bin/supervisord -c /etc/supervisor/conf.d/supervisord.conf

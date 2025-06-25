@@ -29,6 +29,16 @@ RUN apt-get update && apt-get install -y \
     tomcat9 \
     unzip \
     alien \
+    libcairo2-dev \
+    libjpeg-dev \
+    libpng-dev \
+    libossp-uuid-dev \
+    libfreerdp-dev \
+    libpango1.0-dev \
+    libssh2-1-dev \
+    libvncserver-dev \
+    libssl-dev \
+    libwebp-dev \
     --no-install-recommends && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
@@ -41,10 +51,11 @@ RUN sed -i 's/port=3389/port=3390/g' /etc/xrdp/xrdp.ini && \
 # Download and install Guacamole Server
 RUN mkdir -p /opt/guacamole && \
     cd /tmp && \
-    wget -q "https://github.com/apache/guacamole-server/releases/download/1.4.0/guacamole-server-1.4.0-1.el8.x86_64.rpm" && \
-    alien --to-deb --scripts guacamole-server-1.4.0-1.el8.x86_64.rpm && \
-    dpkg -i guacamole-server_1.4.0-2_amd64.deb || true && \
     apt-get update && \
+    apt-get install -y libfreerdp2-2 libfreerdp-client2-2 libpulse0 libvorbis0a libwebp7 && \
+    wget -q "https://github.com/apache/guacamole-server/releases/download/1.6.0/guacamole-server-1.6.0-1.el8.x86_64.rpm" && \
+    alien --to-deb --scripts guacamole-server-1.6.0-1.el8.x86_64.rpm && \
+    dpkg -i guacamole-server_1.6.0-2_amd64.deb || true && \
     apt-get -f install -y --no-install-recommends && \
     ldconfig && \
     rm -rf /tmp/guacamole-server* && \
@@ -53,7 +64,7 @@ RUN mkdir -p /opt/guacamole && \
 
 # Download and install Guacamole Client
 RUN cd /opt/guacamole && \
-    wget -q "https://downloads.apache.org/guacamole/1.4.0/binary/guacamole-1.4.0.war" -O guacamole.war && \
+    wget -q "https://downloads.apache.org/guacamole/1.6.0/binary/guacamole-1.6.0.war" -O guacamole.war && \
     mkdir -p /var/lib/tomcat9/webapps && \
     cp guacamole.war /var/lib/tomcat9/webapps/ && \
     mkdir -p /opt/guacamole/web && \
